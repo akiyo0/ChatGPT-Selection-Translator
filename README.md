@@ -43,3 +43,5 @@ This is a Chrome security restriction - it can only be enabled manually and can'
 Copyright (C) 2026 Akiyo
 
 Licensed under the [GNU General Public License v3.0](LICENSE) (GPL-3.0-or-later).
+
+https://buymeacoffee.com/akiyo0/e/568223
