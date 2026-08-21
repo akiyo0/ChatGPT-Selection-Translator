@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- Copyright (C) 2026 Akiyo, SPDX-License-Identifier: GPL-3.0-or-later -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>ChatGPT Selection Translator - Settings</title>
+<link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>ChatGPT Selection Translator - Settings</h1>
+
+    <section>
+      <label for="apiKey">OpenAI API Key</label>
+      <div class="key-row">
+        <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off" />
+        <button type="button" id="toggleKey">Show</button>
+      </div>
+      <p class="hint">Create one on the API Keys page at platform.openai.com. Billed by usage - separate from a ChatGPT subscription.</p>
+    </section>
+
+    <section>
+      <label for="model">Model</label>
+      <input type="text" id="model" placeholder="gpt-4o-mini" />
+      <p class="hint">Defaults to gpt-4o-mini. You can change it to any other Chat Completions-compatible model name.</p>
+    </section>
+
+    <section>
+      <label for="defaultTargetLanguage">Default target language</label>
+      <select id="defaultTargetLanguage"></select>
+      <input type="text" id="defaultTargetLanguageCustom" placeholder="Custom language name" class="hidden" />
+      <p class="hint">Used for "quick translate" via the keyboard shortcut or toolbar button, without picking a language each time.</p>
+    </section>
+
+    <section>
+      <label>Right-click menu languages</label>
+      <div class="menu-lang-adder">
+        <select id="menuLangSelect"></select>
+        <input type="text" id="menuLangCustom" placeholder="Custom language name" class="hidden" />
+        <button type="button" id="addMenuLang">Add</button>
+      </div>
+      <ul id="menuLangList" class="lang-list"></ul>
+      <p class="hint">After selecting text and right-clicking, the "ChatGPT Translate" submenu lists these languages - click one to translate into it.</p>
+    </section>
+
+    <section>
+      <p class="hint">
+        Want to customize the shortcut? Open
+        <a href="#" id="openShortcuts">chrome://extensions/shortcuts</a>
+      </p>
+    </section>
+
+    <div class="actions">
+      <button type="button" id="testConnection">Test connection</button>
+      <button type="button" id="save" class="primary">Save</button>
+      <span id="status"></span>
+    </div>
+  </div>
+  <script src="options.js"></script>
+</body>
+</html>
