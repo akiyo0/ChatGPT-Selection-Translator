@@ -11,18 +11,33 @@
     <h1>ChatGPT Selection Translator - Settings</h1>
 
     <section>
-      <label for="apiKey">OpenAI API Key</label>
+      <label for="provider">API type</label>
+      <select id="provider">
+        <option value="openai">ChatGPT (OpenAI-compatible API)</option>
+        <option value="gemini">Gemini (Gemini-compatible API)</option>
+      </select>
+      <p class="hint" id="providerHint"></p>
+    </section>
+
+    <section>
+      <label for="baseUrl">API base URL</label>
+      <input type="text" id="baseUrl" autocomplete="off" spellcheck="false" />
+      <p class="hint" id="baseUrlHint"></p>
+    </section>
+
+    <section>
+      <label for="apiKey">API Key</label>
       <div class="key-row">
-        <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off" />
+        <input type="password" id="apiKey" autocomplete="off" />
         <button type="button" id="toggleKey">Show</button>
       </div>
-      <p class="hint">Create one on the API Keys page at platform.openai.com. Billed by usage - separate from a ChatGPT subscription.</p>
+      <p class="hint" id="apiKeyHint"></p>
     </section>
 
     <section>
       <label for="model">Model</label>
-      <input type="text" id="model" placeholder="gpt-4o-mini" />
-      <p class="hint">Defaults to gpt-4o-mini. You can change it to any other Chat Completions-compatible model name.</p>
+      <input type="text" id="model" autocomplete="off" spellcheck="false" />
+      <p class="hint" id="modelHint"></p>
     </section>
 
     <section>
@@ -56,6 +71,7 @@
       <span id="status"></span>
     </div>
   </div>
+  <script src="providers.js"></script>
   <script src="options.js"></script>
 </body>
 </html>

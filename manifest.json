@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
   "name": "ChatGPT Selection Translator",
-  "version": "1.0.0",
-  "description": "Select text on any webpage or PDF, then translate it via the right-click menu, a keyboard shortcut, or the toolbar button, powered by the OpenAI API.",
+  "version": "1.1.0",
+  "description": "Translate selected text on any webpage or PDF via right-click, shortcut or toolbar button, using OpenAI, Gemini, or compatible APIs.",
   "permissions": ["contextMenus", "storage", "scripting", "activeTab"],
-  "host_permissions": ["https://api.openai.com/*"],
+  "host_permissions": ["https://api.openai.com/*", "https://generativelanguage.googleapis.com/*"],
+  "optional_host_permissions": ["https://*/*", "http://*/*"],
   "background": {
     "service_worker": "background.js"
   },

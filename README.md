@@ -2,19 +2,39 @@
 
 Select text on any webpage or PDF, then translate it via the right-click menu, a keyboard shortcut, or the toolbar button. Results show up right there as a floating card or a small popup window - no tab switching needed.
 
+Works with the OpenAI API, the Gemini API, and any service that speaks either format (DeepSeek, OpenRouter, Groq, a local Ollama / LM Studio server, Gemini proxies, ...).
+
 ## Install
 
 1. Open `chrome://extensions`.
 2. Turn on "Developer mode" (top right).
 3. Click "Load unpacked" and select this folder (the one containing `manifest.json`).
 
-## Set up your API key
+## Set up your API
 
 1. Click the extension icon in the toolbar (clicking it with nothing selected also opens the settings page), or right-click the icon and choose "Options".
-2. Create a key on the API Keys page at [platform.openai.com](https://platform.openai.com/) and paste it into the settings page.
-   - This is a usage-billed OpenAI API key, separate from a ChatGPT subscription - your account needs available credit.
-3. Adjust the model (default `gpt-4o-mini`), the default target language, and the right-click menu language list as needed.
-4. Click "Test connection" to confirm the key works, then click "Save".
+2. Pick an **API type**:
+   - **ChatGPT (OpenAI-compatible API)** - OpenAI itself, or any service with an OpenAI-style `/chat/completions` endpoint.
+   - **Gemini (Gemini-compatible API)** - Google's Gemini API, or a proxy with the same `/models/<model>:generateContent` endpoint.
+3. Set the **API base URL** (leave the default for the official APIs) and paste your **API key**:
+   - OpenAI: create a key on the API Keys page at [platform.openai.com](https://platform.openai.com/). This is a usage-billed key, separate from a ChatGPT subscription - your account needs available credit.
+   - Gemini: create a key at [aistudio.google.com](https://aistudio.google.com/).
+   - Self-hosted servers that don't check keys (e.g. Ollama) can leave the key empty.
+4. Set the **model** (defaults: `gpt-4o-mini` / `gemini-2.5-flash`), the default target language, and the right-click menu language list as needed.
+5. Click "Test connection" to confirm everything works, then click "Save". Each API type keeps its own base URL, key and model, so you can switch back and forth without re-entering them.
+
+Base URL examples:
+
+| Service | API type | Base URL |
+| --- | --- | --- |
+| OpenAI | OpenAI-compatible | `https://api.openai.com/v1` (default) |
+| DeepSeek | OpenAI-compatible | `https://api.deepseek.com/v1` |
+| OpenRouter | OpenAI-compatible | `https://openrouter.ai/api/v1` |
+| Ollama (local) | OpenAI-compatible | `http://localhost:11434/v1` |
+| LM Studio (local) | OpenAI-compatible | `http://localhost:1234/v1` |
+| Google Gemini | Gemini-compatible | `https://generativelanguage.googleapis.com/v1beta` (default) |
+
+For OpenAI-compatible services, enter everything before `/chat/completions`; for Gemini-compatible ones, everything before `/models/<model>:generateContent`. When you save or test a custom base URL, Chrome may ask to let the extension access that host - allow it, otherwise requests can be blocked.
 
 ## Three ways to translate
 

@@ -1,18 +1,18 @@
 // Copyright (C) 2026 Akiyo
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+importScripts("providers.js");
+
 const DEFAULT_MENU_LANGUAGES = ["Simplified Chinese", "English"];
 const DEFAULT_TARGET_LANGUAGE = "Simplified Chinese";
-const DEFAULT_MODEL = "gpt-4o-mini";
 const MENU_ID_PREFIX = "translate-to:";
 const PARENT_MENU_ID = "chatgpt-translate-parent";
 
 chrome.runtime.onInstalled.addListener(async () => {
-  const existing = await chrome.storage.local.get(["menuLanguages", "defaultTargetLanguage", "model"]);
+  const existing = await chrome.storage.local.get(["menuLanguages", "defaultTargetLanguage"]);
   const toSet = {};
   if (!existing.menuLanguages || !existing.menuLanguages.length) toSet.menuLanguages = DEFAULT_MENU_LANGUAGES;
   if (!existing.defaultTargetLanguage) toSet.defaultTargetLanguage = DEFAULT_TARGET_LANGUAGE;
-  if (!existing.model) toSet.model = DEFAULT_MODEL;
   if (Object.keys(toSet).length) await chrome.storage.local.set(toSet);
   await rebuildContextMenus();
 });
@@ -87,8 +87,8 @@ async function handleTranslate(tab, selectionText, targetLanguage) {
     return;
   }
 
-  const { apiKey, model } = await chrome.storage.local.get(["apiKey", "model"]);
-  if (!apiKey) {
+  const config = await loadProviderConfig();
+  if (!config.apiKey && isApiKeyRequired(config)) {
     chrome.runtime.openOptionsPage();
     return;
   }
@@ -96,7 +96,7 @@ async function handleTranslate(tab, selectionText, targetLanguage) {
   notifyLoading(tab);
 
   try {
-    const { sourceLanguage, translation } = await callOpenAI(apiKey, model || DEFAULT_MODEL, selectionText, targetLanguage);
+    const { sourceLanguage, translation } = await translateText(config, selectionText, targetLanguage);
     await deliverFinal(tab, {
       type: "SHOW_TRANSLATION",
       original: selectionText,
@@ -146,51 +146,4 @@ async function showInPopupWindow(payload) {
     width: 420,
     height: 420,
   });
-}
-
-async function callOpenAI(apiKey, model, text, targetLanguage) {
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model,
-      response_format: { type: "json_object" },
-      temperature: 0.3,
-      messages: [
-        {
-          role: "system",
-          content:
-            `You are a professional translation assistant. First identify the source language of the text provided by the user, then translate it into ${targetLanguage}. ` +
-            `Respond with strictly the following JSON format and nothing else: {"sourceLanguage": "the name of the source language in English, e.g. “Japanese” or “French”", "translation": "the translated text"}`,
-        },
-        { role: "user", content: text },
-      ],
-    }),
-  });
-
-  if (!response.ok) {
-    let message = `OpenAI API request failed (HTTP ${response.status})`;
-    try {
-      const errJson = await response.json();
-      if (errJson.error && errJson.error.message) message = errJson.error.message;
-    } catch (e) {
-      // ignore
-    }
-    throw new Error(message);
-  }
-
-  const data = await response.json();
-  const content = (data.choices && data.choices[0] && data.choices[0].message.content) || "";
-  try {
-    const parsed = JSON.parse(content);
-    return {
-      sourceLanguage: parsed.sourceLanguage || "",
-      translation: parsed.translation || content,
-    };
-  } catch (e) {
-    return { sourceLanguage: "", translation: content };
-  }
 }
