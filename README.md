@@ -4,6 +4,16 @@ Select text on any webpage or PDF, then translate it via the right-click menu, a
 
 Works with the OpenAI API, the Gemini API, and any service that speaks either format (DeepSeek, OpenRouter, Groq, a local Ollama / LM Studio server, Gemini proxies, ...).
 
+## Screenshots
+
+Select text and right-click → **ChatGPT Translate** → pick a target language:
+
+![Right-click menu: ChatGPT Translate submenu with target languages](Image/Screenshot1.png)
+
+The translation appears in a floating card on the page, with the detected source language and a copy button:
+
+![Floating card showing the original text and its Simplified Chinese translation](Image/Screenshot2.png)
+
 ## Install
 
 1. Open `chrome://extensions`.
